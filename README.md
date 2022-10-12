@@ -1,0 +1,1 @@
+# Nextjs_Autenticacao_Gerenciamento_Tokens
