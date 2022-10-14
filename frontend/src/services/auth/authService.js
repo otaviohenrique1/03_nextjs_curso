@@ -1,4 +1,5 @@
 import { HttpClient } from "../../infra/HttpClient/HttpClient";
+import { tokenService } from "./tokenService";
 
 export const authService = {
   async login({ username, password }) {
@@ -6,20 +7,14 @@ export const authService = {
     // senha: values.senha,
     return HttpClient(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login`, {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        password
-      })
+      body: { username, password }
     })
     .then(async (resposta) => {
       if (!resposta.ok) {
         throw new Error("Usuário ou a senha estão inválidos!")
       }
-      const body = await resposta.json();
-      console.log(body);
+      const body = resposta.body;
+      tokenService.save(body.data.access_token)
     });
   },
 };
